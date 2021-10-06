@@ -7,12 +7,12 @@ ARG sha=2.3.2
 ENV CGOENABLED=1
 
 RUN go version && \
-    apk add --update --no-cache gcc musl-dev git curl nodejs npm make gcc g++ python2 && \
-    mkdir /pufferpanel
+    apk add --update --no-cache gcc musl-dev git curl nodejs npm make gcc g++ python2
 
-WORKDIR /build/pufferpanel
-#RUN git clone https://github.com/PufferPanel/PufferPanel.git
-COPY . .
+#WORKDIR /build/pufferpanel
+RUN git clone https://github.com/PufferPanel/PufferPanel.git
+WORKDIR /build/PufferPanel
+#COPY . .
 RUN go build -v -tags $tags -ldflags "-X 'github.com/pufferpanel/pufferpanel/v2.Hash=$sha' -X 'github.com/pufferpanel/pufferpanel/v2.Version=$version'" -o /pufferpanel/pufferpanel github.com/pufferpanel/pufferpanel/v2/cmd && \
     mv assets/email /pufferpanel/email && \
     cd client && \
