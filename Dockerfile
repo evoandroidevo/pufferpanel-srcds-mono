@@ -9,6 +9,7 @@ ENV CGOENABLED=1
 RUN go version && \
     apk add --update --no-cache gcc musl-dev git curl nodejs npm make gcc g++ python2
 
+WORKDIR /build
 #WORKDIR /build/pufferpanel
 RUN git clone https://github.com/PufferPanel/PufferPanel.git
 WORKDIR /build/PufferPanel
@@ -24,10 +25,8 @@ FROM steamcmd/steamcmd:ubuntu-18 as srcdsbuilder
 ENV USER root
 ENV HOME /root/installer
 WORKDIR $HOME
-RUN apt-get update \
- && apt-get install -y --no-install-recommends curl tar
-RUN curl http://media.steampowered.com/installer/steamcmd_linux.tar.gz \
-    --output steamcmd.tar.gz --silent
+RUN apt-get update && apt-get install -y --no-install-recommends curl tar
+RUN curl -fsSL https://media.steampowered.com/installer/steamcmd_linux.tar.gz --output steamcmd.tar.gz
 RUN tar -xvzf steamcmd.tar.gz && rm steamcmd.tar.gz
 
 FROM mono as base
