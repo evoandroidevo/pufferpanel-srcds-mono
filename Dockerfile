@@ -1,13 +1,15 @@
-FROM golang:alpine AS builder
+FROM golang:bullseye AS builder
 
 ARG tags=none
-ARG version=2.3.2
-ARG sha=2.3.2
+ARG version=devel
+ARG sha=devel
 
 ENV CGOENABLED=1
 
+RUN apt update
+RUN apt upgrade -y
 RUN go version && \
-    apk add --update --no-cache gcc musl-dev git curl nodejs npm make gcc g++ python2
+    apt install -y gcc musl-dev git curl nodejs npm make gcc g++ python2
 
 WORKDIR /build
 #WORKDIR /build/pufferpanel
